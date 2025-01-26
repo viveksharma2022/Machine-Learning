@@ -8,6 +8,22 @@ from sklearn.datasets import make_moons
 from sklearn.preprocessing import PolynomialFeatures
 import matplotlib.pyplot as plt
 
+def PlotDecisionBoundary(estimator, X , y, kernelType) :
+    h = .02  # Step size in the mesh
+    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+
+    # Predict the label for every point in the mesh grid
+    Z = estimator.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = Z.reshape(xx.shape)
+
+    # Plot the decision boundary
+    plt.contourf(xx, yy, Z, alpha=0.75, cmap=plt.cm.coolwarm)
+    plt.scatter(X[:, 0], X[:, 1], c=y, edgecolors='k', marker='o', s=100, cmap=plt.cm.coolwarm)
+    plt.title(f'SVM Classifier with {kernelType} Kernel (coef0={coef})')
+    plt.show()
+
 if __name__ == "__main__":
 
     irisData = datasets.load_iris()
@@ -31,19 +47,16 @@ if __name__ == "__main__":
     svmClfNonLin.fit(X,y)
 
     # Plot decision boundary
-    h = .02  # Step size in the mesh
-    x_min, x_max = X[:, 0].min() - 1, X[:, 0].max() + 1
-    y_min, y_max = X[:, 1].min() - 1, X[:, 1].max() + 1
-    xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
+    PlotDecisionBoundary(svmClfNonLin, X, y, "Poly")
 
-    # Predict the label for every point in the mesh grid
-    Z = svmClfNonLin.predict(np.c_[xx.ravel(), yy.ravel()])
-    Z = Z.reshape(xx.shape)
+    # Gausian kernel/ Radial Basis function
+    rbfNonLinPip = Pipeline([
+        ("Scaler", StandardScaler()),
+        ("svMRBF", SVC(kernel = "rbf", gamma=5, C = 0.0001))
+    ])
 
-    # Plot the decision boundary
-    plt.contourf(xx, yy, Z, alpha=0.75, cmap=plt.cm.coolwarm)
-    plt.scatter(X[:, 0], X[:, 1], c=y, edgecolors='k', marker='o', s=100, cmap=plt.cm.coolwarm)
-    plt.title(f'SVM Classifier with Polynomial Kernel (coef0={coef})')
-    plt.show()
+    rbfNonLinPip.fit(X,y)
+    # Plot decision boundary
+    PlotDecisionBoundary(rbfNonLinPip, X, y, "RBF")
 
     pause = 1
