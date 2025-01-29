@@ -21,7 +21,7 @@ def PlotDecisionBoundary(estimator, X , y, kernelType) :
     # Plot the decision boundary
     plt.contourf(xx, yy, Z, alpha=0.75, cmap=plt.cm.coolwarm)
     plt.scatter(X[:, 0], X[:, 1], c=y, edgecolors='k', marker='o', s=100, cmap=plt.cm.coolwarm)
-    plt.title(f'SVM Classifier with {kernelType} Kernel (coef0={coef})')
+    #plt.title(f'SVM Classifier with {kernelType} Kernel (coef0={coef})')
     plt.show()
 
 if __name__ == "__main__":
