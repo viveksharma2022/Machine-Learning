@@ -69,7 +69,6 @@ def Producer(files_list):
             data = future.result() # get result immediately
             del future
             
-            print(f"Data length: {len(data)}")
             # Check if the future completed successfully
             if data is not None:
                 print(f"Produced data: {data['fileName']}")  # Debugging print
@@ -137,8 +136,6 @@ def Consumer(save_file):
 # Main execution
 if __name__ == "__main__":
     params = dict()
-    params["QUEUE_SIZE"] = 10
-    params["BATCH_SIZE"] = 4
     params["input_folder"] = r"C:\Users\vivek\Downloads\birdclef-2025\train_audio"
     params["saveFile"] = r"C:\Users\vivek\Downloads\birdclef-2025\train_audio_humanSpeechRemoved.pkl"
 
