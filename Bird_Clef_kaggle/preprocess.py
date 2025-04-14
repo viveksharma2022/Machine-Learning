@@ -43,7 +43,7 @@ class Preprocessor:
 
 
 # Thread-safe queue for processing
-data_queue = queue.Queue(maxsize=4)
+data_queue = queue.Queue(maxsize=10)
 
 # Condition variable for synchronization
 condition = threading.Condition()
@@ -67,7 +67,7 @@ def LoadData(item):
 def Producer(files_list):
     """Load data in multiple threads and add it to the queue."""
     totalFiles = len(files_list)
-    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:  # Use 5 threads for parallel loading
+    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:  # Use 5 threads for parallel loading
         for idx, file_id in enumerate(files_list):
             future = executor.submit(LoadData, file_id)
             data = future.result() # get result immediately
